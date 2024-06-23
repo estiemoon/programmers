@@ -1,5 +1,7 @@
 # 가계부
 
+기존 코드 github : https://github.com/feel5ny/prms-js
+
 ## Use Case
 
 1. 현재 자산을 입력할 수 있다.
