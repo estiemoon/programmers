@@ -30,6 +30,14 @@ type TDeleteBoardAction = {
     boardId : string;
 
 }
+type TSortAction = {
+    boardIndex : number;
+    droppableIdStart : string;
+    droppableIdEnd : string;
+    dropableIndexStart : number;
+    dropableIndexEnd : number;
+    draggableId : string;
+}
 const initialState : TBoardsState = {
     modalActive : false,
     boardArray : [
@@ -171,6 +179,30 @@ const boardsSlice = createSlice({
                 }
                 : board
             )
+        },
+
+        sort : (state,{payload}:PayloadAction<TSortAction>) => {
+            // 같은 리스트
+            if(payload.droppableIdStart === payload.droppableIdEnd) {
+                const list = state.boardArray[payload.boardIndex].lists.find(
+                    list => list.listId === payload.droppableIdStart
+                )
+                // 변경시킨 아이템을 배열에서 지운 후 return으로 값을 뽑아
+                const card = list?.tasks.splice(payload.dropableIndexStart, 1);
+                list?.tasks.splice(payload.dropableIndexEnd, 0, ...card!) //...card! type 단언?
+            }
+            // 다른 리스트
+            if(payload.droppableIdStart !== payload.droppableIdEnd){
+                const listStart = state.boardArray[payload.boardIndex].lists.find(
+                    list => list.listId === payload.droppableIdStart
+                )
+                const card = listStart?.tasks.splice(payload.dropableIndexStart,1);
+                const listEnd = state.boardArray[payload.boardIndex].lists.find(
+                    list => list.listId === payload.droppableIdEnd
+                )
+                listEnd?.tasks.splice(payload.dropableIndexEnd,0, ...card!);
+            }
+            
         }
 
         
@@ -184,4 +216,4 @@ export const boardsReducer= boardsSlice.reducer; //sub reducer => combine해줄 
 export const {
     addBoard,deleteList,setModalActive,
     addList,addTask,updateTask,deleteTask
-    ,deleteBoard} = boardsSlice.actions; //action creator
+    ,deleteBoard,sort} = boardsSlice.actions; //action creator
