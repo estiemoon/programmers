@@ -1,7 +1,6 @@
 import React, { ChangeEvent, FC, useState } from 'react'
 import { FiX } from 'react-icons/fi';
 import { useTypedDispatch } from '../../../hooks/redux';
-import { board } from '../../../App.css';
 import { addList, addTask } from '../../../store/slices/boardsSlice';
 import { v4 } from 'uuid';
 import { addLog } from '../../../store/slices/loggerSlice';
